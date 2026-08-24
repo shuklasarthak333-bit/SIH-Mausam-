@@ -262,27 +262,35 @@ async function getWeather(
          */
 
         const url =
-
             `https://api.open-meteo.com/v1/forecast` +
-
             `?latitude=${latitude}` +
-
             `&longitude=${longitude}` +
-
             `&current=` +
-
             `temperature_2m,` +
-
             `relative_humidity_2m,` +
-
             `apparent_temperature,` +
-
             `weather_code,` +
-
-            `wind_speed_10m` +
-
-            `&hourly=precipitation_probability` +
-
+            `wind_speed_10m,` +
+            `precipitation,` +
+            `soil_moisture_0_to_1cm,` +
+            `soil_temperature_0cm` +
+            `&hourly=` +
+            `precipitation_probability,` +
+            `precipitation,` +
+            `soil_moisture_0_to_1cm,` +
+            `soil_moisture_1_to_3cm,` +
+            `soil_moisture_3_to_9cm,` +
+            `soil_moisture_9_to_27cm,` +
+            `soil_moisture_27_to_81cm,` +
+            `et0_fao_evapotranspiration` +
+            `&daily=` +
+            `temperature_2m_min,` +
+            `temperature_2m_max,` +
+            `precipitation_sum,` +
+            `precipitation_probability_max,` +
+            `weather_code,` +
+            `sunrise,` +
+            `sunset` +
             `&timezone=auto`;
 
 
@@ -306,6 +314,113 @@ async function getWeather(
         const current =
             data.current;
 
+        /* =========================================
+           MAUSAM PERSONALISATION N8N
+        ========================================== */
+
+        const weatherForMausam = {
+            temperature: current.temperature_2m,
+            feels_like: current.apparent_temperature,
+            humidity: current.relative_humidity_2m,
+
+            weather_code: current.weather_code,
+            condition: weatherCodes[current.weather_code] || "UNKNOWN",
+
+            wind_speed: current.wind_speed_10m,
+
+            precipitation_now: current.precipitation,
+
+            rain_probability:
+                data.hourly?.precipitation_probability?.[0] ?? null,
+
+            rainfall_forecast:
+                data.daily?.precipitation_sum?.[0] ?? null,
+
+            soil_moisture_surface:
+                data.hourly?.soil_moisture_0_to_1cm?.[0] ?? null,
+
+            soil_moisture_root:
+                data.hourly?.soil_moisture_9_to_27cm?.[0] ?? null,
+
+            soil_temperature:
+                current.soil_temperature_0cm,
+
+            et0:
+                data.hourly?.et0_fao_evapotranspiration?.[0] ?? null,
+
+            min_temperature:
+                data.daily?.temperature_2m_min?.[0] ?? null,
+
+            max_temperature:
+                data.daily?.temperature_2m_max?.[0] ?? null
+        };
+
+        console.log("Mausam personalization data:", weatherForMausam);
+        
+        const profile = "agriculture";
+
+        const mausamPayload = {
+            profile: profile,
+
+            location: {
+                name: cityName || "Current Location",
+                latitude: latitude,
+                longitude: longitude
+            },
+
+            weather: weatherForMausam
+        };
+
+        console.log(
+            "Sending to Mausam personalization:",
+            mausamPayload
+        );
+
+        const N8N_WEBHOOK_URL =
+            "https://sc-2-n8n.app.n8n.cloud/webhook/mausam-recs";
+
+        try {
+
+            const n8nResponse = await fetch(
+                N8N_WEBHOOK_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(
+                        mausamPayload
+                    )
+                }
+            );
+
+            if (!n8nResponse.ok) {
+
+                throw new Error(
+                    `n8n request failed: ${n8nResponse.status}`
+                );
+
+            }
+
+            const recommendations =
+                await n8nResponse.json();
+
+            console.log(
+                "Mausam recommendations:",
+                recommendations
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Personalization error:",
+                error
+            );
+
+        }
 
         /* =========================================
            TEMPERATURE
