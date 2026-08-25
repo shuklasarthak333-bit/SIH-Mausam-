@@ -1,0 +1,1120 @@
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+/* =====================================================
+   THEME TOKENS
+===================================================== */
+
+:root {
+
+    --page-bg: #F8F1E3;
+    --text-main: #65472E;
+    --text-secondary: #8B5A2B;
+    --orange: #D97743;
+    --brown: #8B5A2B;
+    --cream: #FFF8E8;
+
+    --shadow: 0 6px 18px rgba(100, 75, 35, 0.10);
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    font-family: "Nunito", sans-serif;
+
+    color: var(--text-main);
+
+    background:
+        radial-gradient(circle at 10% 5%, rgba(255,255,255,0.8), transparent 30%),
+        radial-gradient(circle at 90% 90%, rgba(223,168,114,0.16), transparent 32%),
+        var(--page-bg);
+
+    overflow-x: hidden;
+
+    transition:
+        background 0.8s ease,
+        color 0.8s ease;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+
+/* =====================================================
+   APP
+===================================================== */
+
+.app {
+    width: 100%;
+    max-width: 430px;
+    min-height: 100vh;
+    margin: auto;
+    padding: 24px 16px 25px;
+}
+
+
+/* =====================================================
+   SMOOTH TRANSITIONS
+===================================================== */
+
+.weather-card,
+.search-section,
+#searchForm,
+.agriculture-card,
+.metrics-card,
+.forecast-card,
+.recommendation-card,
+.info-box,
+.metric-box,
+.forecast-container,
+.recommendation,
+.sunrise-section,
+.sunrise-center,
+.weather-location,
+.modal-content,
+.toast,
+.language-toggle {
+
+    transition:
+        background 0.8s ease,
+        background-color 0.8s ease,
+        color 0.8s ease,
+        border-color 0.8s ease,
+        box-shadow 0.8s ease;
+}
+
+
+/* =====================================================
+   IMAGES
+===================================================== */
+
+.card-background {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    z-index: 0;
+    transform: none;
+
+    transition:
+        filter 0.8s ease,
+        opacity 0.8s ease;
+}
+
+.weather-card:hover .card-background,
+.agriculture-card:hover .card-background,
+.metrics-card:hover .card-background {
+    transform: none;
+}
+
+
+/* =====================================================
+   FIRST WEATHER CARD
+===================================================== */
+
+.weather-card {
+    position: relative;
+    top:50px;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    border-radius: 20px;
+    background: #E9D49D;
+    box-shadow: var(--shadow);
+}
+
+.weather-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(to top, rgba(0,0,0,0.32), transparent 70%);
+}
+
+
+/* =====================================================
+   DARK/LIGHT TOGGLE
+===================================================== */
+
+.theme-toggle {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,248,235,0.94);
+    color: #8B5A2B;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.16);
+    cursor: pointer;
+
+    transition:
+        background 0.8s ease,
+        color 0.8s ease,
+        transform 0.3s ease;
+}
+
+.theme-toggle:hover { transform: scale(1.08); }
+.theme-toggle:active { transform: scale(0.92); }
+
+.theme-toggle i {
+    font-size: 16px;
+    transition: transform 0.6s ease, opacity 0.3s ease;
+}
+
+
+/* =====================================================
+   LOCATION
+===================================================== */
+
+.weather-location {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 7px 10px;
+    border-radius: 10px;
+    background: rgba(255,248,223,0.95);
+    color: #4F2D19;
+    box-shadow: 0 3px 10px rgba(40,25,10,0.18);
+}
+
+.weather-location span {
+    color: #4F2D19;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.weather-location small {
+    margin-top: 2px;
+    color: #8B5A2B;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   WEATHER CONTENT
+===================================================== */
+
+.weather-content {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    color: white;
+}
+
+.temperature {
+    font-size: 58px;
+    line-height: 0.9;
+    font-weight: 700;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+.temperature sup {
+    font-size: 23px;
+    vertical-align: top;
+    position: relative;
+    top: 6px;
+}
+
+.condition {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.feels-like {
+    margin-top: 3px;
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.search-section {
+    width: 100%;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 20;
+}
+
+#searchForm {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    border-radius: 30px;
+    background: rgba(255,255,255,0.96);
+    border: 1px solid rgba(217,119,67,0.12);
+    box-shadow: var(--shadow);
+}
+
+#searchForm > i {
+    color: #D97743;
+    font-size: 18px;
+}
+
+#searchInput {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #65472E;
+    font-size: 13px;
+}
+
+#searchInput::placeholder {
+    color: rgba(139, 90, 43, 0.55);
+}
+
+#searchForm button {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border: none;
+    border-radius: 50%;
+    background: #D97743;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#searchForm button:hover { transform: scale(1.1); }
+
+
+/* =====================================================
+   AGRICULTURE
+===================================================== */
+
+.agriculture-card {
+    position: relative;
+    width: 100%;
+    height: 256px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    border-radius: 20px;
+    background: #DDD;
+    box-shadow: var(--shadow);
+}
+
+.agriculture-grid {
+    position: absolute;
+    inset: 12px;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-items: center;
+}
+
+.agriculture-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.info-box {
+    width: 100%;
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.88);
+    color: #8B5A2B;
+    text-align: left;
+    box-shadow: 0 3px 8px rgba(80,60,30,0.08);
+    cursor: pointer;
+
+    transition:
+        transform 0.3s ease,
+        background 0.8s ease,
+        color 0.8s ease;
+}
+
+.info-box:hover { transform: translateY(-3px); }
+.info-box:active { transform: scale(0.97); }
+
+.info-box i {
+    width: 25px;
+    flex-shrink: 0;
+    text-align: center;
+    color: #8B5A2B;
+    font-size: 18px;
+}
+
+.info-box span {
+    display: block;
+    font-size: 9px;
+}
+
+.info-box strong {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+    line-height: 1.2;
+}
+
+
+/* =====================================================
+   HUMIDITY + WIND
+===================================================== */
+
+.metrics-card {
+    position: relative;
+    width: 100%;
+    height: 176px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    border-radius: 20px;
+    background: #DDD;
+    box-shadow: var(--shadow);
+}
+
+.metrics-container {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.metric-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 13px;
+    background: rgba(255,255,255,0.87);
+    box-shadow: 0 3px 8px rgba(80,60,30,0.08);
+}
+
+.metric-box i {
+    color: #D97743;
+    font-size: 25px;
+}
+
+.metric-box span {
+    display: block;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.metric-box strong {
+    display: block;
+    margin-top: 2px;
+    font-size: 22px;
+}
+
+.metric-box small {
+    font-size: 10px;
+    font-weight: 400;
+}
+
+
+/* =====================================================
+   FORECAST
+===================================================== */
+
+.forecast-card {
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 16px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #E8D18A, #D9BC63);
+    box-shadow: var(--shadow);
+}
+
+.forecast-container {
+    width: 100%;
+    padding: 9px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.93);
+}
+
+.forecast-row {
+    display: grid;
+    grid-template-columns: 1fr 0.5fr 0.4fr;
+    align-items: center;
+    min-height: 33px;
+    padding: 2px 5px;
+    color: #65472E;
+    font-size: 11px;
+}
+
+.forecast-row strong { text-align: center; }
+.forecast-row i { text-align: center; font-size: 15px; }
+
+.sunny { color: #D97743; }
+.cloudy { color: #99998D; }
+.rainy { color: #718A96; }
+
+
+/* =====================================================
+   RECOMMENDATION
+===================================================== */
+
+.recommendation-card {
+    width: 100%;
+    height: 145px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #C7E7E3, #B9DEDB);
+    box-shadow: var(--shadow);
+}
+
+.recommendation {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.88);
+    text-align: center;
+}
+
+.recommendation i {
+    color: #D97743;
+    font-size: 23px;
+}
+
+.recommendation p {
+    color: #8B5A2B;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+
+/* =====================================================
+   SURYA UDAY
+===================================================== */
+
+.sunrise-section {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+.sunrise-arches {
+    position: relative;
+    width: 300px;
+    height: 175px;
+}
+
+.arch {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50% 50% 0 0;
+    background: transparent;
+}
+
+.arch-one { width: 260px; height: 260px; bottom: -125px; border: 11px solid #DFA872; }
+.arch-two { width: 215px; height: 215px; bottom: -105px; border: 11px solid #D97743; }
+.arch-three { width: 170px; height: 170px; bottom: -85px; border: 11px solid #A8583E; }
+
+.sunrise-center {
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    width: 125px;
+    height: 95px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 50% 50% 35% 35%;
+    color: #8B5A2B;
+    z-index: 10;
+}
+
+.sunrise-center span {
+    margin-bottom: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.sunrise-center strong {
+    font-size: 15px;
+    color: #A8583E;
+}
+
+
+/* =====================================================
+   LANGUAGE
+===================================================== */
+
+.language-switcher {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 4px 0 22px;
+}
+
+.language-toggle {
+    min-width: 145px;
+    min-height: 44px;
+    padding: 8px 18px;
+    border: 1px solid rgba(139,90,43,0.25);
+    border-radius: 25px;
+    background: rgba(255,248,232,0.9);
+    color: #8B5A2B;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(80,60,30,0.08);
+}
+
+.language-divider {
+    margin: 0 8px;
+    opacity: 0.45;
+}
+
+.language-toggle .active {
+    color: #D97743;
+    font-weight: 800;
+}
+
+
+/* =====================================================
+   HINDI
+===================================================== */
+
+body.hindi-mode {
+    font-family: "Noto Sans Devanagari", "Nirmala UI", "Mangal", sans-serif;
+}
+
+body.hindi-mode button,
+body.hindi-mode input {
+    font-family: "Noto Sans Devanagari", "Nirmala UI", "Mangal", sans-serif;
+}
+
+body.hindi-mode i {
+    font-family: "Font Awesome 6 Free";
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 4500;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgba(60,40,20,0.38);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity 0.35s ease,
+        visibility 0.35s ease;
+}
+
+.modal.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    position: relative;
+    width: min(100%, 350px);
+    padding: 25px;
+    border-radius: 20px;
+    background: #FFF8DF;
+    box-shadow: 0 20px 60px rgba(60,40,20,0.25);
+}
+
+.modal-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    border: none;
+    background: transparent;
+    color: #8B5A2B;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.modal-label {
+    color: #D97743;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.modal-content h2 {
+    margin-top: 6px;
+    color: #65472E;
+    font-size: 23px;
+}
+
+.modal-content p {
+    margin-top: 10px;
+    color: #80654A;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.modal-button {
+    margin-top: 18px;
+    padding: 9px 17px;
+    border: none;
+    border-radius: 10px;
+    background: #D97743;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    z-index: 4600;
+    transform: translate(-50%,20px);
+    padding: 9px 17px;
+    border-radius: 20px;
+    background: #65472E;
+    color: #FFF8DF;
+    font-size: 11px;
+    opacity: 0;
+    pointer-events: none;
+
+    transition:
+        opacity 0.35s ease,
+        transform 0.35s ease;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translate(-50%,0);
+}
+
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+body.dark-mode {
+    --page-bg: #1F1A16;
+    --text-main: #F6EAD7;
+    background: #1F1A16;
+    color: #F6EAD7;
+}
+
+body.dark-mode .theme-toggle { background: rgba(55,45,37,0.95); color: #FFD782; }
+body.dark-mode #searchForm { background: rgba(48,40,33,0.96); border-color: rgba(229,138,85,0.18); }
+body.dark-mode #searchInput { color: #F6EAD7; }
+body.dark-mode #searchInput::placeholder { color: rgba(246,234,215,0.5); }
+body.dark-mode .info-box { background: rgba(48,40,33,0.95); color: #F0DEC5; }
+body.dark-mode .info-box i { color: #E58A55; }
+body.dark-mode .metric-box { background: rgba(48,40,33,0.95); color: #F6EAD7; }
+body.dark-mode .metric-box i { color: #E58A55; }
+body.dark-mode .forecast-card { background: linear-gradient(135deg, #59472D, #403526); }
+body.dark-mode .forecast-container { background: rgba(45,38,31,0.97); }
+body.dark-mode .forecast-row { color: #F7E9D2; }
+body.dark-mode .recommendation-card { background: linear-gradient(135deg, #294443, #203735); }
+body.dark-mode .recommendation { background: rgba(45,38,31,0.96); }
+body.dark-mode .recommendation p { color: #F7E9D2; }
+body.dark-mode .weather-location { background: rgba(48,40,33,0.96); }
+body.dark-mode .weather-location span { color: #F6EAD7; }
+body.dark-mode .weather-location small { color: #E9C79A; }
+body.dark-mode .sunrise-center { background: #302820; color: #F7E9D2; }
+body.dark-mode .sunrise-center strong { color: #E58A55; }
+body.dark-mode .language-toggle { background: rgba(48,40,33,0.96); color: #F6EAD7; border-color: rgba(229,138,85,0.25); }
+body.dark-mode .language-toggle .active { color: #E58A55; }
+body.dark-mode .modal-content { background: #302820; }
+body.dark-mode .modal-content h2 { color: #F7E9D2; }
+body.dark-mode .modal-content p { color: #D5BFA3; }
+body.dark-mode .modal-close { color: #F7E9D2; }
+
+
+/* =====================================================
+   MOBILE — APP CARDS
+===================================================== */
+
+@media (max-width: 400px) {
+
+    .app { padding: 18px 12px 20px; }
+    .weather-card { height: 210px; }
+    .temperature { font-size: 50px; }
+    .theme-toggle { top: 13px; left: 13px; width: 38px; height: 38px; }
+    .weather-location { top: 13px; right: 13px; }
+    .agriculture-card { height: 250px; }
+    .info-box { min-height: 54px; gap: 6px; padding: 6px; }
+    .info-box span { font-size: 8px; }
+    .info-box strong { font-size: 9px; }
+    .metrics-card { height: 155px; }
+    .metric-box { padding: 8px; }
+    .metric-box i { font-size: 22px; }
+    .metric-box strong { font-size: 19px; }
+    .recommendation p { font-size: 14px; }
+
+}
+
+
+/* =====================================================================
+   PRELOADER + SLIDE NAVIGATION
+   (recolored to the Golden Harvest palette, sits above the app content)
+===================================================================== */
+
+.preloader {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 9999;
+    overflow: hidden;
+    background: #000;
+    color: white;
+}
+
+.loader-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.05);
+    filter: brightness(0.6) sepia(0.25) saturate(1.2);
+}
+
+.loader-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(35, 20, 8, 0.35);
+    z-index: 1;
+}
+
+.preloader-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader-brand {
+    font-family: sans-serif;
+    font-size: clamp(40px, 8vw, 110px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-transform: lowercase;
+    opacity: 0;
+    transform: translateY(40px);
+}
+
+.loader-bottom {
+    position: absolute;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0;
+}
+
+.loader-percent {
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* -----------------------------------------------------
+   MENU TOGGLER
+----------------------------------------------------- */
+
+.nav-toggler {
+    position: fixed;
+    top: 22px;
+    right: 25px;
+    width: 48px;
+    height: 48px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    z-index: 3000;
+}
+
+.nav-toggler span {
+    position: absolute;
+    left: 10px;
+    width: 28px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--text-main);
+    transform-origin: center;
+
+    transition:
+        top 0.5s ease,
+        transform 0.5s ease,
+        background 0.3s ease;
+}
+
+.nav-toggler span:nth-child(1) { top: 20px; }
+.nav-toggler span:nth-child(2) { top: 28px; }
+
+.nav-toggler.open span:nth-child(1) {
+    top: 24px;
+    transform: rotate(45deg);
+    background: white;
+}
+
+.nav-toggler.open span:nth-child(2) {
+    top: 24px;
+    transform: rotate(-45deg);
+    background: white;
+}
+
+
+/* -----------------------------------------------------
+   NAVIGATION CURTAIN
+----------------------------------------------------- */
+
+.nav-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    pointer-events: none;
+}
+
+.nav-bg-wrapper {
+    position: absolute;
+    inset: 0;
+    display: flex;
+}
+
+.nav-bg {
+    flex: 1;
+    height: 100%;
+    transform: scaleY(0);
+    transform-origin: top;
+    background: #5C3A22;
+}
+
+.nav-bg:nth-child(1) { background: #4A2E1C; }
+.nav-bg:nth-child(2) { background: #6B4226; }
+.nav-bg:nth-child(3) { background: #8B5A2B; }
+.nav-bg:nth-child(4) { background: #C1792E; }
+.nav-bg:nth-child(5) { background: #D97743; }
+
+.nav-items {
+    position: absolute;
+    inset: 0;
+    padding: 30px 5vw 35px;
+    display: flex;
+    flex-direction: column;
+    color: #FFF8E8;
+    font-family: "Nunito", sans-serif;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
+    pointer-events: none;
+}
+
+.nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-main {
+    margin-top: auto;
+    margin-bottom: auto;
+    overflow: scroll;
+}
+
+.nav-main::-webkit-scrollbar { display: none; }
+
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    overflow: visible;
+}
+
+.nav-link {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    color: #FFF8E8;
+    text-decoration: none;
+    overflow: visible;
+    width: fit-content;
+}
+
+.nav-number {
+    width: 25px;
+    flex-shrink: 0;
+    font-size: 9px;
+    opacity: 0.5;
+}
+
+.nav-link-text-wrapper { overflow: visible; }
+
+.nav-link-text {
+    display: block;
+    font-size: clamp(20px, 4vw, 85px);
+    line-height: 1.11;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    transform: translateY(110%);
+    transition: font-style 0.3s ease;
+}
+
+.nav-link:hover .nav-link-text { font-style: italic; }
+
+.nav-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.nav-footer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.nav-footer-info span { opacity: 0.5; }
+.nav-footer-info strong { font-weight: 700; }
+
+
+/* -----------------------------------------------------
+   MUSIC CONTROL
+----------------------------------------------------- */
+
+.music-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    background: transparent;
+    color: #FFF8E8;
+    cursor: pointer;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: opacity 0.3s ease;
+}
+
+.music-control:hover { opacity: 0.65; }
+
+.music-icon {
+    display: inline-block;
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.music-control.playing .music-icon {
+    animation: musicPulse 1s ease-in-out infinite;
+}
+
+@keyframes musicPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.25); }
+}
+
+.nav-menu.open { pointer-events: auto; }
+.nav-menu.open .nav-items { pointer-events: auto; }
+
+
+/* -----------------------------------------------------
+   NAV — MOBILE
+----------------------------------------------------- */
+
+@media (max-width: 600px) {
+
+    .nav-toggler { top: 12px; right: 12px; width: 42px; height: 42px; }
+    .nav-toggler span { width: 24px; left: 9px; }
+    .nav-toggler span:nth-child(1) { top: 17px; }
+    .nav-toggler span:nth-child(2) { top: 24px; }
+    .nav-toggler.open span:nth-child(1),
+    .nav-toggler.open span:nth-child(2) { top: 21px; }
+
+    .nav-items { padding: 20px 20px 25px; }
+    .nav-main { margin-top: auto; margin-bottom: auto; }
+    .nav-link { gap: 10px; }
+    .nav-number { width: 18px; font-size: 7px; }
+    .nav-link-text { font-size: clamp(34px, 12vw, 60px); }
+    .nav-footer { gap: 15px; }
+    .nav-footer-info { display: none; }
+
+}
+
+@media (max-width: 380px) {
+    .nav-link-text { font-size: 32px; }
+}
