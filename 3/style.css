@@ -1,9 +1,6 @@
 /* =====================================================
    RESET
 ===================================================== */
-/* =====================================================
-   RESET
-===================================================== */
 
 * {
     margin: 0;
@@ -1059,30 +1056,6 @@ body {
             10px;
     }
 }
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-html,
-body {
-    width: 100%;
-    height: 100%;
-}
-
-body {
-    overflow-x: hidden;
-    overflow-y: auto;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    background: #101820;
-    color: #111;
-}
-
 
 /* =====================================================
    PRELOADER
